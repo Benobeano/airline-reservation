@@ -1,2 +1,3 @@
 # airline-reservation
-CS443 web project
+CS443 airline reservation web project
+

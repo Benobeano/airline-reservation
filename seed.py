@@ -1,13 +1,37 @@
 # file for seeding or manual db modifications
 from datetime import datetime
 from app import app
-from models import db, User, Flight
+from models import db, User, Flight, Seat, Booking
 
 def seed_database():
-    """Seed the database with initial data."""
+    """Populate the database with mock data."""
     with app.app_context():
-        user1 = User(first_name="Jane", last_name="Doe", email="alice@example.com", password_hash="pass1")
-        user2 = User(first_name="John", last_name="Pork", email="John@example.com", password_hash="pass2")
+        # Clear existing data
+        db.session.query(Seat).delete()
+        db.session.query(Booking).delete()
+        db.session.query(Flight).delete()
+        db.session.query(User).delete()
+        
+        # Add users
+        user1 = User(
+            first_name="Alice", 
+            last_name="Smith", 
+            email="alice@example.com", 
+            password_hash="hashed_pw1", 
+            phone_number="123-456-7890", 
+            date_of_birth=datetime.strptime("1990-01-01", "%Y-%m-%d")
+        )
+        user2 = User(
+            first_name="Bob", 
+            last_name="Johnson", 
+            email="bob@example.com", 
+            password_hash="hashed_pw2", 
+            phone_number=None, 
+            date_of_birth=datetime.strptime("1985-05-15", "%Y-%m-%d")
+        )
+        db.session.add_all([user1, user2])
+
+        # Add flights
         flight1 = Flight(
             flight_number="FL123",
             departure_time=datetime.strptime("2024-12-01 10:00:00", "%Y-%m-%d %H:%M:%S"),
@@ -26,13 +50,35 @@ def seed_database():
             airline="AirSample",
             total_seats=250
         )
+        db.session.add_all([flight1, flight2])
 
-        # Commit data to the database
-        db.session.add_all([user1, user2, flight1, flight2])
+        # Add bookings
+        booking1 = Booking(
+            user_id=1,  # Alice's ID
+            flight_id=1,  # Flight 1's ID
+            booking_date=datetime.utcnow(),
+            status="CONFIRMED"
+        )
+        booking2 = Booking(
+            user_id=2,  # Bob's ID
+            flight_id=2,  # Flight 2's ID
+            booking_date=datetime.utcnow(),
+            status="CONFIRMED"
+        )
+        db.session.add_all([booking1, booking2])
+
+        # Add seats
+        seats = []
+        for i in range(1, 11):  # First 10 seats for flight 1
+            seats.append(Seat(flight_id=1, seat_number=f"1A-{i}", is_available=True if i % 2 == 0 else False))
+        for i in range(1, 11):  # First 10 seats for flight 2
+            seats.append(Seat(flight_id=2, seat_number=f"2B-{i}", is_available=True if i % 2 != 0 else False))
+        db.session.add_all(seats)
+
+        # Commit changes
         db.session.commit()
 
         print("Database seeded successfully!")
-
 def show_all_tables():
     """Show all tables and  entries"""
     with app.app_context():
@@ -53,6 +99,15 @@ def show_all_tables():
                 print("No entries found.")
             print("\n")
 
+def clear_tables():
+    """Clear all entries from the tables but keep the tables intact."""
+    with app.app_context():
+        # Get all models and clear their data
+        for table in reversed(db.metadata.sorted_tables):
+            db.session.execute(table.delete())
+        db.session.commit()
+        print("All table entries have been cleared.")
+
 def delete_all_tables():
     with app.app_context():
         db.drop_all()
@@ -62,6 +117,6 @@ if __name__ == "__main__":
     # with app.app_context():
     #     db.create_all()
 
-    # seed_database()
-    show_all_tables()
+    seed_database()
     # delete_all_tables()
+    show_all_tables()

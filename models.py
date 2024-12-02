@@ -9,13 +9,12 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
+    role = db.Column(db.String(50), nullable=True)  # Corrected: db.String, not db.string
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
-    phone_number = db.Column(db.String(15), nullable=True)
-    date_of_birth = db.Column(db.Date, nullable=True)
-
     # Relationships
     bookings = db.relationship('Booking', backref='user', lazy=True)
+
 
 class Flight(db.Model):
     __tablename__ = 'flight'

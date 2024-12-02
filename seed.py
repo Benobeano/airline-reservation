@@ -1,7 +1,10 @@
 # file for seeding or manual db modifications
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 from app import app
 from models import db, User, Flight, Seat, Booking
+
+bcrypt = Bcrypt(app)
 
 def seed_database():
     """Populate the database with mock data."""
@@ -12,22 +15,20 @@ def seed_database():
         db.session.query(Flight).delete()
         db.session.query(User).delete()
         
-        # Add users
+        # Add users with hashed passwords
         user1 = User(
             first_name="Alice", 
             last_name="Smith", 
+            role="user", 
             email="alice@example.com", 
-            password_hash="hashed_pw1", 
-            phone_number="123-456-7890", 
-            date_of_birth=datetime.strptime("1990-01-01", "%Y-%m-%d")
+            password_hash=bcrypt.generate_password_hash("password123").decode('utf-8'), 
         )
         user2 = User(
             first_name="Bob", 
             last_name="Johnson", 
+            role="user",  
             email="bob@example.com", 
-            password_hash="hashed_pw2", 
-            phone_number=None, 
-            date_of_birth=datetime.strptime("1985-05-15", "%Y-%m-%d")
+            password_hash=bcrypt.generate_password_hash("securepassword").decode('utf-8'), 
         )
         db.session.add_all([user1, user2])
 
@@ -56,22 +57,22 @@ def seed_database():
         booking1 = Booking(
             user_id=1,  # Alice's ID
             flight_id=1,  # Flight 1's ID
-            booking_date=datetime.utcnow(),
+            booking_date=datetime.now(),
             status="CONFIRMED"
         )
         booking2 = Booking(
             user_id=2,  # Bob's ID
             flight_id=2,  # Flight 2's ID
-            booking_date=datetime.utcnow(),
+            booking_date=datetime.now(),
             status="CONFIRMED"
         )
         db.session.add_all([booking1, booking2])
 
         # Add seats
         seats = []
-        for i in range(1, 11):  # First 10 seats for flight 1
+        for i in range(1, 11):
             seats.append(Seat(flight_id=1, seat_number=f"1A-{i}", is_available=True if i % 2 == 0 else False))
-        for i in range(1, 11):  # First 10 seats for flight 2
+        for i in range(1, 11):
             seats.append(Seat(flight_id=2, seat_number=f"2B-{i}", is_available=True if i % 2 != 0 else False))
         db.session.add_all(seats)
 
@@ -79,6 +80,8 @@ def seed_database():
         db.session.commit()
 
         print("Database seeded successfully!")
+
+
 def show_all_tables():
     """Show all tables and  entries"""
     with app.app_context():
@@ -102,7 +105,7 @@ def show_all_tables():
 def clear_tables():
     """Clear all entries from the tables but keep the tables intact."""
     with app.app_context():
-        # Get all models and clear their data
+        # Get all models and clear data
         for table in reversed(db.metadata.sorted_tables):
             db.session.execute(table.delete())
         db.session.commit()
@@ -117,6 +120,6 @@ if __name__ == "__main__":
     # with app.app_context():
     #     db.create_all()
 
-    seed_database()
+    # seed_database()
     # delete_all_tables()
     show_all_tables()

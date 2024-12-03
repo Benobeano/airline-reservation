@@ -4,18 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airline Reservation System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
     <header>
-        <h1>Welcome to the Airline Reservation System</h1>
-        <p>Your one-stop platform for managing flight bookings and reservations.</p>
+        <div class="header-image">
+            <div class="overlay-text">
+                <h1>Airline Reservation System</h1>
+                <p>Your one-stop platform for managing flight bookings and reservations.</p>
+            </div>
+            <div class="user-info">
+                {% if user_full_name %}
+                    <span>Logged in as: {{ user_full_name }}</span>
+                    <a href="{{ url_for('logout') }}" class="logout-button">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="login-button">Login</a>
+                {% endif %}
+            </div>
+        </div>
     </header>
     <main>
         <section class="navigation">
             <a href="/search" class="button">Flight Search</a>
             <a href="/login" class="button">Login / Sign Up</a>
-            <a href="/profile" class="button">Customer Profile Page</a>
+            <a href="/profile" class="button">Your Profile</a>
         </section>
     </main>
 </body>

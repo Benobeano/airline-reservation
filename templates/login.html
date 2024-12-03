@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Login / Sign Up</h1>
+        <div class="forms">
+            <div class="form">
+                <h2>Login</h2>
+                <form method="POST">
+                    {{ login_form.hidden_tag() }}
+                    <p>{{ login_form.email.label }} {{ login_form.email() }}</p>
+                    <p>{{ login_form.password.label }} {{ login_form.password() }}</p>
+                    <p>{{ login_form.submit() }}</p>
+                </form>
+            </div>
+            <div class="form">
+                <h2>Sign Up</h2>
+                <form method="POST">
+                    {{ signup_form.hidden_tag() }}
+                    <p>{{ signup_form.first_name.label }} {{ signup_form.first_name() }}</p>
+                    <p>{{ signup_form.last_name.label }} {{ signup_form.last_name() }}</p>
+                    <p>{{ signup_form.email.label }} {{ signup_form.email() }}</p>
+                    <p>{{ signup_form.password.label }} {{ signup_form.password() }}</p>
+                    <p>{{ signup_form.confirm_password.label }} {{ signup_form.confirm_password() }}</p>
+                    <p>{{ signup_form.submit() }}</p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

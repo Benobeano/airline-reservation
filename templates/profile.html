@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+</head>
+<body>
+    <div class="home-button-container">
+        <a href="{{ url_for('home') }}" class="home-button">Return to Home</a>
+    </div>
+    <header>
+        <h1>Welcome, {{ user.first_name }}!</h1>
+        <p>Email: {{ user.email }}</p>
+    </header>
+    <main>
+        <section>
+            <h2>Upcoming Bookings</h2>
+            {% if upcoming_bookings %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Flight</th>
+                            <th>Destination</th>
+                            <th>Departure</th>
+                            <th>Seats</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in upcoming_bookings %}
+                            <tr>
+                                <td>{{ booking.flight.flight_number }}</td>
+                                <td>{{ booking.flight.destination }}</td>
+                                <td>{{ booking.flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ booking.seats }}</td>
+                                <td>{{ booking.status }}</td>
+                                <td>
+                                    <a href="{{ url_for('book_flight', flight_id=booking.flight_id) }}" class="action-button">Book Again</a>
+                                    <form method="POST" style="display:inline;">
+                                        <input type="hidden" name="booking_id" value="{{ booking.id }}">
+                                        <button type="submit" class="action-button cancel-button">Cancel</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No upcoming bookings.</p>
+            {% endif %}
+        </section>
+
+        <section>
+            <h2>Past Bookings</h2>
+            {% if past_bookings %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Flight</th>
+                            <th>Destination</th>
+                            <th>Departure</th>
+                            <th>Seats</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in past_bookings %}
+                            <tr>
+                                <td>{{ booking.flight.flight_number }}</td>
+                                <td>{{ booking.flight.destination }}</td>
+                                <td>{{ booking.flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ booking.seats }}</td>
+                                <td>{{ booking.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No past bookings.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

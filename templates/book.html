@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Flight</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='book.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const pricePerSeat = parseFloat("{{ price_per_seat }}"); // Safely inject price_per_seat
+            const seatsInput = document.getElementById("seats");
+            const totalPriceElement = document.getElementById("total-price");
+
+            function updateTotalPrice() {
+                const seats = parseInt(seatsInput.value || 0, 10);
+                const totalPrice = seats * pricePerSeat;
+                totalPriceElement.textContent = totalPrice.toFixed(2);
+            }
+
+            // Update total price on input change
+            seatsInput.addEventListener("input", updateTotalPrice);
+
+            // Initialize total price
+            updateTotalPrice();
+        });
+    </script>
+</head>
+<body>
+    <div class="home-button-container">
+        <a href="{{ url_for('home') }}" class="home-button">Return to Home</a>
+    </div>
+    
+    <header>
+        <h1>Flight Booking</h1>
+    </header>
+    <main>
+        {% if not logged_in %}
+            <p>Please <a href="{{ url_for('login') }}">Login</a> to Book a Flight.</p>
+        {% else %}
+            <section class="flight-details">
+                <h2>Flight Details</h2>
+                <p><strong>Airline:</strong> {{ flight.airline }}</p>
+                <p><strong>Destination:</strong> {{ flight.destination }}</p>
+                <p><strong>Departure:</strong> {{ flight.departure_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p><strong>Arrival:</strong> {{ flight.arrival_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                <p><strong>Available Seats:</strong> {{ flight.total_seats }}</p>
+                <p><strong>Price Per Seat:</strong> ${{ price_per_seat }}</p>
+            </section>
+            <form method="POST" class="booking-form">
+                <label for="seats">Number of Seats:</label>
+                <input 
+                    type="number" 
+                    id="seats" 
+                    name="seats" 
+                    min="1" 
+                    max="{{ flight.total_seats }}" 
+                    value="1" 
+                    required
+                >
+                <p><strong>Total Price:</strong> $<span id="total-price">{{ price_per_seat }}</span></p>
+                <button type="submit" class="confirm-button">Confirm Booking</button>
+            </form>
+        {% endif %}
+    </main>
+</body>
+</html>

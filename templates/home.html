@@ -28,6 +28,10 @@
             <a href="/search" class="button">Flight Search</a>
             <a href="/login" class="button">Login / Sign Up</a>
             <a href="/profile" class="button">Your Profile</a>
+            {% if user_role == 'admin' %}
+            <!-- <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a> -->
+            <a href="/admin" class="button">Admin Dashboard</a>
+        {% endif %}
         </section>
     </main>
 </body>

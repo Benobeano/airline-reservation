@@ -9,7 +9,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    role = db.Column(db.String(50), nullable=True)  # Corrected: db.String, not db.string
+    role = db.Column(db.String(50), nullable=True)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     # Relationships
@@ -44,6 +44,8 @@ class Booking(db.Model):
         nullable=False,
         default='CONFIRMED'
     )
+    seats = db.Column(db.Integer, nullable=False)  # Number of seats booked
+
 
 class Seat(db.Model):
     __tablename__ = 'seat'

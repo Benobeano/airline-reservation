@@ -1,0 +1,127 @@
+/* General body styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-form label {
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.search-form select,
+.search-form input,
+.search-form button {
+    padding: 10px;
+    margin: 5px 0 10px;
+    font-size: 1em;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.search-button {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+/* Results Section */
+.results {
+    max-width: 800px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.results h2 {
+    color: #007BFF;
+}
+
+.results table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.results th,
+.results td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+.results th {
+    background-color: #f4f4f9;
+    font-weight: bold;
+}
+
+.book-button {
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.book-button:hover {
+    background-color: #218838;
+}
+.home-button-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.home-button {
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover effect */
+.home-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
